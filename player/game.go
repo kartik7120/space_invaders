@@ -1,0 +1,111 @@
+package player
+
+import (
+	_ "image/png"
+	"time"
+
+	"github.com/hajimehoshi/ebiten/v2"
+)
+
+type Timer struct {
+	currentTicks int
+	targetTicks  int
+}
+
+func newTimer(d time.Duration) *Timer {
+	return &Timer{
+		targetTicks:  int(d.Milliseconds()) * ebiten.TPS() / 1000,
+		currentTicks: 0,
+	}
+}
+
+func (t *Timer) update() {
+	if t.currentTicks < t.targetTicks {
+		t.currentTicks++
+	}
+}
+
+func (t *Timer) reset() {
+	t.currentTicks = 0
+}
+
+func (t *Timer) isReady() bool {
+	return t.currentTicks >= t.targetTicks
+}
+
+type Game struct {
+	invaderAnimation  *Timer
+	animationPositive bool
+	animationNegative bool
+	player            *Player
+	invaders          [][]*Invader
+	bullets           []*Lazer
+	lazerTimer        *Timer
+}
+
+func (g *Game) Update() error {
+	g.invaderAnimation.update()
+	if g.invaderAnimation.isReady() {
+		if g.animationPositive {
+			for i := 0; i < len(g.invaders); i++ {
+				for j := 0; j < len(g.invaders[i]); j++ {
+					g.invaders[i][j].Update(2)
+				}
+			}
+			g.animationPositive = false
+			g.animationNegative = true
+		} else if g.animationNegative {
+			for i := 0; i < len(g.invaders); i++ {
+				for j := 0; j < len(g.invaders[i]); j++ {
+					g.invaders[i][j].Update(-2)
+				}
+			}
+			g.animationPositive = true
+			g.animationNegative = false
+		}
+		g.invaderAnimation.reset()
+	}
+	g.player.Update()
+	return nil
+}
+
+func (g *Game) AddBullet(lazer *Lazer) {
+	g.bullets = append(g.bullets, lazer)
+}
+
+func (g *Game) Draw(screen *ebiten.Image) {
+
+	for i := 0; i < len(g.invaders); i++ {
+		for j := 0; j < len(g.invaders[i]); j++ {
+			g.invaders[i][j].Draw(screen)
+		}
+	}
+
+	for i := 0; i < len(g.bullets); i++ {
+		g.bullets[i].Draw(screen)
+	}
+
+	g.player.Draw(screen)
+}
+
+func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
+	return 320, 240
+}
+
+func NewGame() *Game {
+	ebiten.SetWindowSize(640, 480)
+	ebiten.SetWindowTitle("Space Invaders")
+
+	g := &Game{
+		invaderAnimation:  newTimer(2 * time.Second),
+		bullets:           []*Lazer{},
+		animationPositive: true,
+		animationNegative: false,
+		invaders:          GenerateInvaders(5, 5),
+		lazerTimer:        newTimer(1 * time.Second),
+	}
+
+	g.player = NewPlayer(g)
+
+	return g
+}
