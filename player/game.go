@@ -41,6 +41,7 @@ type Game struct {
 	invaders          [][]*Invader
 	bullets           []*Lazer
 	lazerTimer        *Timer
+	score             int
 }
 
 func (g *Game) Update() error {
@@ -65,6 +66,25 @@ func (g *Game) Update() error {
 		}
 		g.invaderAnimation.reset()
 	}
+
+	for i := 0; i < len(g.bullets); i++ {
+		g.bullets[i].Update(g.player)
+	}
+
+	// Collision detection
+
+	for i := 0; i < len(g.invaders); i++ {
+		for j := 0; j < len(g.invaders[i]); j++ {
+			for k := 0; k < len(g.bullets); k++ {
+				if g.bullets[k].Collider().Intersects(g.invaders[i][j].Collider()) {
+					g.invaders[i] = append(g.invaders[i][:j], g.invaders[i][j+1:]...)
+					g.bullets = append(g.bullets[:k], g.bullets[k+1:]...)
+					g.score += 10
+				}
+			}
+		}
+	}
+
 	g.player.Update()
 	return nil
 }
@@ -102,7 +122,8 @@ func NewGame() *Game {
 		animationPositive: true,
 		animationNegative: false,
 		invaders:          GenerateInvaders(5, 5),
-		lazerTimer:        newTimer(1 * time.Second),
+		lazerTimer:        newTimer(2 * time.Second),
+		score:             0,
 	}
 
 	g.player = NewPlayer(g)
