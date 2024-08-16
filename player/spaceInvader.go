@@ -64,3 +64,9 @@ func GenerateInvaders(rows, columns int) [][]*Invader {
 	}
 	return invaderMatrix
 }
+
+func (i *Invader) Collider() utils.Rect {
+	bounds := invaderImage.Bounds()
+
+	return utils.NewRect(i.position.x, i.position.y, float64(bounds.Dx()), float64(bounds.Dy()))
+}
