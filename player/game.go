@@ -1,10 +1,12 @@
 package player
 
 import (
+	"fmt"
 	_ "image/png"
 	"time"
 
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 )
 
 type Timer struct {
@@ -105,9 +107,10 @@ func (g *Game) Draw(screen *ebiten.Image) {
 		g.bullets[i].Draw(screen)
 	}
 
+	ebitenutil.DebugPrint(screen, fmt.Sprintf("Score: %d", g.score))
+
 	g.player.Draw(screen)
 }
-
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
 	return 320, 240
 }
