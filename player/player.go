@@ -54,11 +54,17 @@ func (p *Player) Update() {
 		if p.position.x <= screenXboundary {
 			p.position.x += 2
 		}
-	} else if ebiten.IsKeyPressed(ebiten.KeyControl) && p.game.lazerTimer.isReady() {
-		// Shoot laser
-		p.game.bullets = append(p.game.bullets, NewLazer(p.position.x, p.position.y))
+	} else if p.game.lazerTimer.isReady() && ebiten.IsKeyPressed(ebiten.KeyControl) {
+		bounds := spaceShip.Bounds()
+		halfWidth := float64(bounds.Dx()) / 2
+		halfHeight := float64(bounds.Dy()) / 2
+		lazerXPos := p.position.x + halfWidth
+		lazerYPos := p.position.y + halfHeight
+
+		p.game.bullets = append(p.game.bullets, NewLazer(lazerXPos, lazerYPos))
 		p.game.lazerTimer.reset()
 	}
+
 }
 
 func (p *Player) Draw(screen *ebiten.Image) {
