@@ -2,10 +2,12 @@ package player
 
 import (
 	"fmt"
+	"game/utils"
 	_ "image/png"
 	"time"
 
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/audio"
 	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 )
 
@@ -44,6 +46,7 @@ type Game struct {
 	bullets           []*Lazer
 	lazerTimer        *Timer
 	score             int
+	Audioplayer       *audio.Player
 }
 
 func (g *Game) Update() error {
@@ -79,9 +82,14 @@ func (g *Game) Update() error {
 		for j := 0; j < len(g.invaders[i]); j++ {
 			for k := 0; k < len(g.bullets); k++ {
 				if g.bullets[k].Collider().Intersects(g.invaders[i][j].Collider()) {
-					g.invaders[i] = append(g.invaders[i][:j], g.invaders[i][j+1:]...)
+					if g.invaders[i][j].invaderType == "white" {
+						g.score += 10
+					}
+					if g.invaders[i][j].invaderType == "red" {
+						g.score += 20
+					}
+					g.invaders[i] = append(g.invaders[i][:j], g.invaders[i][(j+1):]...)
 					g.bullets = append(g.bullets[:k], g.bullets[k+1:]...)
-					g.score += 10
 				}
 			}
 		}
@@ -111,6 +119,7 @@ func (g *Game) Draw(screen *ebiten.Image) {
 
 	g.player.Draw(screen)
 }
+
 func (g *Game) Layout(outsideWidth, outsideHeight int) (screenWidth, screenHeight int) {
 	return 320, 240
 }
@@ -127,6 +136,7 @@ func NewGame() *Game {
 		invaders:          GenerateInvaders(5, 5),
 		lazerTimer:        newTimer(2 * time.Second),
 		score:             0,
+		Audioplayer:       utils.Audioplayer("lazerSound.mp3"),
 	}
 
 	g.player = NewPlayer(g)
