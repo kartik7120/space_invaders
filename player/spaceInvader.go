@@ -7,22 +7,31 @@ import (
 )
 
 type Invader struct {
-	position Vector
-	invader  *ebiten.Image
+	position    Vector
+	invader     *ebiten.Image
+	InvaderType string
 }
 
 var invaderImage *ebiten.Image = utils.MustLoadImage("space_invader6.png")
+var redInvaderImage *ebiten.Image = utils.MustLoadImage("red_invader3.png")
 
-func NewInvader() *Invader {
+func NewInvader(invaderType string) *Invader {
 
 	pos := Vector{
 		x: 0,
 		y: 10,
 	}
-
+	if invaderType == "red" {
+		return &Invader{
+			position:    pos,
+			invader:     redInvaderImage,
+			InvaderType: invaderType,
+		}
+	}
 	return &Invader{
-		position: pos,
-		invader:  invaderImage,
+		position:    pos,
+		invader:     invaderImage,
+		InvaderType: invaderType,
 	}
 }
 
@@ -48,18 +57,39 @@ func (i *Invader) Update(offset int) {
 }
 
 func GenerateInvaders(rows, columns int) [][]*Invader {
-	invaders := make([]*Invader, 0)
 	screenXMid := screenWidth/2 - invaderImage.Bounds().Dx()/2
 	invaderMatrix := make([][]*Invader, rows)
 
 	for i := 0; i < rows; i++ {
 		invaderMatrix[i] = make([]*Invader, columns)
 		for j := 0; j < columns; j++ {
-			invader := NewInvader()
-			invader.position.x = float64(screenXMid + j*invaderImage.Bounds().Dx())
-			invader.position.y = float64(i * invaderImage.Bounds().Dy())
+			invader := NewInvader("white")
+			invader.position.x = float64(screenXMid + j*invaderImage.Bounds().Dx() - (columns-1)*invaderImage.Bounds().Dx()/2 + j*5)
+			invader.position.y = float64(i*invaderImage.Bounds().Dy() + ((i + 1) * invaderImage.Bounds().Dy() / 2))
 			invaderMatrix[i][j] = invader
-			invaders = append(invaders, invader)
+		}
+	}
+	return invaderMatrix
+}
+
+func GenerateInvadersLvl2(rows, columns int) [][]*Invader {
+	screenXMid := screenWidth/2 - invaderImage.Bounds().Dx()/2
+	invaderMatrix := make([][]*Invader, rows)
+
+	for i := 0; i < rows; i++ {
+		invaderMatrix[i] = make([]*Invader, columns)
+		for j := 0; j < columns; j++ {
+			if i%2 != 0 {
+				invader := NewInvader("red")
+				invader.position.x = float64(screenXMid + j*invaderImage.Bounds().Dx() - (columns-1)*invaderImage.Bounds().Dx()/2 + j*5)
+				invader.position.y = float64(i*invaderImage.Bounds().Dy() + ((i + 1) * invaderImage.Bounds().Dy() / 2))
+				invaderMatrix[i][j] = invader
+				continue
+			}
+			invader := NewInvader("white")
+			invader.position.x = float64(screenXMid + j*invaderImage.Bounds().Dx() - (columns-1)*invaderImage.Bounds().Dx()/2 + j*5)
+			invader.position.y = float64(i*invaderImage.Bounds().Dy() + ((i + 1) * invaderImage.Bounds().Dy() / 2))
+			invaderMatrix[i][j] = invader
 		}
 	}
 	return invaderMatrix
