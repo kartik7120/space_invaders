@@ -18,15 +18,13 @@ type Vector struct {
 type Player struct {
 	position Vector
 	player   *ebiten.Image
-	game     *Game
 }
 
 var spaceShip *ebiten.Image = utils.MustLoadImage("space_invader_ship4.png")
 
-func NewPlayer(g *Game) *Player {
+func NewPlayer() *Player {
 
 	bounds := spaceShip.Bounds()
-
 	halfWidth := float64(bounds.Dx()) / 2
 
 	pos := Vector{
@@ -37,13 +35,13 @@ func NewPlayer(g *Game) *Player {
 	return &Player{
 		position: pos,
 		player:   spaceShip,
-		game:     g,
 	}
 }
 
 func (p *Player) Update() {
 
-	p.game.lazerTimer.update()
+	state := GetGameState("state")
+	state.LazerTimer.Update()
 	screenXboundary := float64(screenWidth) - float64(p.player.Bounds().Dx())
 
 	if ebiten.IsKeyPressed(ebiten.KeyLeft) {
@@ -54,15 +52,15 @@ func (p *Player) Update() {
 		if p.position.x <= screenXboundary {
 			p.position.x += 2
 		}
-	} else if p.game.lazerTimer.isReady() && ebiten.IsKeyPressed(ebiten.KeyControl) {
+	} else if state.LazerTimer.IsReady() && ebiten.IsKeyPressed(ebiten.KeyControl) {
 		bounds := spaceShip.Bounds()
 		halfWidth := float64(bounds.Dx()) / 2
 		halfHeight := float64(bounds.Dy()) / 2
 		lazerXPos := p.position.x + halfWidth
 		lazerYPos := p.position.y + halfHeight
 
-		p.game.bullets = append(p.game.bullets, NewLazer(lazerXPos, lazerYPos))
-		p.game.lazerTimer.reset()
+		state.Bullets = append(state.Bullets, NewLazer(lazerXPos, lazerYPos))
+		state.LazerTimer.Reset()
 	}
 
 }
