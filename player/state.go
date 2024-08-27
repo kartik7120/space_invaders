@@ -8,6 +8,7 @@ import (
 )
 
 var gameMap map[string]*GameState = make(map[string]*GameState)
+var currKey *string
 
 type GameState struct {
 	InvaderAnimation   *utils.Timer
@@ -38,6 +39,7 @@ func NewGameState() *GameState {
 
 func SetGameState(key string, state *GameState) {
 	gameMap[key] = state
+	currKey = &key
 }
 
 func GetGameState(key string) *GameState {
@@ -46,4 +48,13 @@ func GetGameState(key string) *GameState {
 	} else {
 		return nil
 	}
+}
+
+func DeleteState(key string) {
+	delete(gameMap, key)
+	currKey = nil
+}
+
+func GetCurrKey() string {
+	return *currKey
 }
