@@ -66,9 +66,16 @@ var Lvl2Screen *manager.Scene = &manager.Scene{
 					}
 				}
 			}
+			if len(state.Invaders[i]) == 0 {
+				state.Invaders = append(state.Invaders[:i], state.Invaders[(i+1):]...)
+			}
 		}
 
 		state.Player.Update()
+
+		if len(state.Invaders) == 0 {
+			Context.Manager.SwitchTo("lvl3")
+		}
 
 		return nil
 	},
