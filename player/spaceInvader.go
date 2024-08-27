@@ -13,7 +13,7 @@ type Invader struct {
 }
 
 var invaderImage *ebiten.Image = utils.MustLoadImage("space_invader6.png")
-var redInvaderImage *ebiten.Image = utils.MustLoadImage("red_invader3.png")
+var redInvaderImage *ebiten.Image = utils.MustLoadImage("red_invader7.png")
 
 func NewInvader(invaderType string) *Invader {
 
@@ -75,14 +75,15 @@ func GenerateInvaders(rows, columns int) [][]*Invader {
 func GenerateInvadersLvl2(rows, columns int) [][]*Invader {
 	screenXMid := screenWidth/2 - invaderImage.Bounds().Dx()/2
 	invaderMatrix := make([][]*Invader, rows)
+	screenXRedMid := screenWidth/2 - redInvaderImage.Bounds().Dx()/2
 
 	for i := 0; i < rows; i++ {
 		invaderMatrix[i] = make([]*Invader, columns)
 		for j := 0; j < columns; j++ {
 			if i%2 != 0 {
 				invader := NewInvader("red")
-				invader.position.x = float64(screenXMid + j*invaderImage.Bounds().Dx() - (columns-1)*invaderImage.Bounds().Dx()/2 + j*5)
-				invader.position.y = float64(i*invaderImage.Bounds().Dy() + ((i + 1) * invaderImage.Bounds().Dy() / 2))
+				invader.position.x = float64(screenXRedMid + j*redInvaderImage.Bounds().Dx() - (columns-1)*redInvaderImage.Bounds().Dx()/2 + j*5)
+				invader.position.y = float64(i*redInvaderImage.Bounds().Dy() + ((i + 1) * redInvaderImage.Bounds().Dy() / 2))
 				invaderMatrix[i][j] = invader
 				continue
 			}
@@ -96,6 +97,10 @@ func GenerateInvadersLvl2(rows, columns int) [][]*Invader {
 }
 
 func (i *Invader) Collider() utils.Rect {
+	if i.InvaderType == "red" {
+		bounds := redInvaderImage.Bounds()
+		return utils.NewRect(i.position.x, i.position.y, float64(bounds.Dx()), float64(bounds.Dy()))
+	}
 	bounds := invaderImage.Bounds()
 
 	return utils.NewRect(i.position.x, i.position.y, float64(bounds.Dx()), float64(bounds.Dy()))
