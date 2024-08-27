@@ -39,8 +39,7 @@ func NewPlayer() *Player {
 }
 
 func (p *Player) Update() {
-
-	state := GetGameState("state")
+	state := GetGameState(*currKey)
 	state.LazerTimer.Update()
 	screenXboundary := float64(screenWidth) - float64(p.player.Bounds().Dx())
 
