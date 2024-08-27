@@ -13,6 +13,7 @@ type Game struct {
 var m *manager.Manager = manager.MakeManager(map[string]*manager.Scene{
 	"title": scenes.TitleScreen,
 	"lvl1":  scenes.Lvl1Screen,
+	"lvl2":  scenes.Lvl2Screen,
 },
 	// the first scene
 	"title")
