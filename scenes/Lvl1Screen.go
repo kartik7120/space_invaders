@@ -65,9 +65,15 @@ var Lvl1Screen *manager.Scene = &manager.Scene{
 					}
 				}
 			}
+			if len(state.Invaders[i]) == 0 {
+				state.Invaders = append(state.Invaders[:i], state.Invaders[(i+1):]...)
+			}
 		}
 
 		state.Player.Update()
+		if len(state.Invaders) == 0 {
+			Context.Manager.SwitchTo("lvl2")
+		}
 
 		return nil
 	},
@@ -86,6 +92,5 @@ var Lvl1Screen *manager.Scene = &manager.Scene{
 		ebitenutil.DebugPrint(screen, fmt.Sprintf("Score: %d", state.Score))
 
 		state.Player.Draw(screen)
-
 	},
 }
