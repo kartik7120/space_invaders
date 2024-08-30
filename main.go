@@ -11,9 +11,11 @@ type Game struct {
 }
 
 var m *manager.Manager = manager.MakeManager(map[string]*manager.Scene{
-	"title": scenes.TitleScreen,
-	"lvl1":  scenes.Lvl1Screen,
-	"lvl2":  scenes.Lvl2Screen,
+	"title":    scenes.TitleScreen,
+	"lvl1":     scenes.Lvl1Screen,
+	"lvl2":     scenes.Lvl2Screen,
+	"lvl3":     scenes.Lvl3Screen,
+	"gameOver": scenes.GameOverScreen,
 },
 	// the first scene
 	"title")
