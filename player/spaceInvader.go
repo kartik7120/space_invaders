@@ -211,6 +211,16 @@ func (i *Invader) Collider() utils.Rect {
 		bounds := redInvaderImage.Bounds()
 		return utils.NewRect(i.position.x, i.position.y, float64(bounds.Dx()), float64(bounds.Dy()))
 	}
+
+	if i.InvaderType == "yellow" {
+		yellowInvaderWidth, yellowInvaderHeight := text.Measure("%", &text.GoTextFace{
+			Source: InvaderTextSource,
+			Size:   15,
+		}, float64(2))
+
+		return utils.NewRect(i.position.x, i.position.y, float64(yellowInvaderWidth), float64(yellowInvaderHeight))
+	}
+
 	bounds := invaderImage.Bounds()
 
 	return utils.NewRect(i.position.x, i.position.y, float64(bounds.Dx()), float64(bounds.Dy()))
