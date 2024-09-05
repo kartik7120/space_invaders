@@ -64,6 +64,12 @@ func (i *Invader) Update(offset int) {
 
 }
 
+func (i *Invader) GetPostion() (x, y int) {
+	x = int(i.position.x)
+	y = int(i.position.y)
+	return
+}
+
 func GenerateInvaders(rows, columns int) [][]*Invader {
 	screenXMid := screenWidth/2 - invaderImage.Bounds().Dx()/2
 	invaderMatrix := make([][]*Invader, rows)
