@@ -14,6 +14,7 @@ type Invader struct {
 
 var invaderImage *ebiten.Image = utils.MustLoadImage("space_invader6.png")
 var redInvaderImage *ebiten.Image = utils.MustLoadImage("red_invader7.png")
+var InvaderTextSource = utils.MustLoadInvaderFont()
 
 func NewInvader(invaderType string) *Invader {
 
@@ -25,6 +26,13 @@ func NewInvader(invaderType string) *Invader {
 		return &Invader{
 			position:    pos,
 			invader:     redInvaderImage,
+			InvaderType: invaderType,
+		}
+	}
+	if invaderType == "yellow" {
+		return &Invader{
+			position:    pos,
+			invader:     nil,
 			InvaderType: invaderType,
 		}
 	}
