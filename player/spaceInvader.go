@@ -4,6 +4,7 @@ import (
 	"game/utils"
 
 	"github.com/hajimehoshi/ebiten/v2"
+	"github.com/hajimehoshi/ebiten/v2/text/v2"
 )
 
 type Invader struct {
@@ -107,6 +108,101 @@ func GenerateInvadersLvl2(rows, columns int) [][]*Invader {
 			invaderMatrix[i][j] = invader
 		}
 	}
+	return invaderMatrix
+}
+
+func GenerateInvadersLvl3(rows, columns int) []*Invader {
+	yellowInvaderWidth, yellowInvaderHeight := text.Measure("%", &text.GoTextFace{
+		Source: InvaderTextSource,
+		Size:   15,
+	}, float64(2))
+
+	yellowXMid := screenWidth/2 - yellowInvaderWidth/2
+	yellowYMid := screenHeight/2 - yellowInvaderHeight/2
+	whiteXMid := screenWidth/2 - invaderImage.Bounds().Dx()/2
+	whiteYMid := screenHeight/2 - invaderImage.Bounds().Dy()/2
+	// redXMid := screenWidth/2 - redInvaderImage.Bounds().Dx()/2
+
+	invaderMatrix := make([]*Invader, 0)
+	// 1st side of cross
+	for i := 0; i < columns; i++ {
+		if i < columns-1 {
+			invader := NewInvader("white")
+			invader.position.x = float64(whiteXMid - i*invaderImage.Bounds().Dx() - invaderImage.Bounds().Dx())
+			invader.position.y = float64(whiteYMid - i*invaderImage.Bounds().Dy() - invaderImage.Bounds().Dy())
+			invaderMatrix = append(invaderMatrix, invader)
+		}
+		if i == columns-1 {
+			invader := NewInvader("yellow")
+			invader.position.x = float64(yellowXMid)
+			invader.position.y = float64(yellowYMid)
+			invaderMatrix = append(invaderMatrix, invader)
+			invader2 := NewInvader("red")
+			invader2.position.x = float64(whiteXMid - (i-1)*invaderImage.Bounds().Dx() - invaderImage.Bounds().Dx() - redInvaderImage.Bounds().Dx())
+			invader2.position.y = float64(whiteYMid - (i-1)*invaderImage.Bounds().Dy() - redInvaderImage.Bounds().Dy())
+			invaderMatrix = append(invaderMatrix, invader2)
+			invader3 := NewInvader("yellow")
+			invader3.position.x = float64(whiteXMid - (i-1)*invaderImage.Bounds().Dx() - invaderImage.Bounds().Dx() + redInvaderImage.Bounds().Dx())
+			invader3.position.y = float64(whiteYMid - (i-1)*invaderImage.Bounds().Dy() - redInvaderImage.Bounds().Dy())
+			invaderMatrix = append(invaderMatrix, invader3)
+		}
+	}
+
+	// 2nd side of cross
+
+	for i := 0; i < columns; i++ {
+		if i < columns-1 {
+			invader := NewInvader("white")
+			invader.position.x = float64(whiteXMid + i*invaderImage.Bounds().Dx() + invaderImage.Bounds().Dx())
+			invader.position.y = float64(whiteYMid - i*invaderImage.Bounds().Dy() - invaderImage.Bounds().Dy())
+			invaderMatrix = append(invaderMatrix, invader)
+		}
+		if i == columns-1 {
+			invader2 := NewInvader("red")
+			invader2.position.x = float64(whiteXMid + (i-1)*invaderImage.Bounds().Dx() + invaderImage.Bounds().Dx() + redInvaderImage.Bounds().Dx())
+			invader2.position.y = float64(whiteYMid - (i-1)*invaderImage.Bounds().Dy() - redInvaderImage.Bounds().Dy())
+			invaderMatrix = append(invaderMatrix, invader2)
+			invader3 := NewInvader("yellow")
+			invader3.position.x = float64(whiteXMid + (i-1)*invaderImage.Bounds().Dx() + invaderImage.Bounds().Dx() - redInvaderImage.Bounds().Dx())
+			invader3.position.y = float64(whiteYMid - (i-1)*invaderImage.Bounds().Dy() - redInvaderImage.Bounds().Dy())
+			invaderMatrix = append(invaderMatrix, invader3)
+		}
+	}
+
+	// 3rd side of cross
+
+	for i := 0; i < columns-2; i++ {
+		if i < columns-1-2 {
+			invader := NewInvader("white")
+			invader.position.x = float64(whiteXMid - i*invaderImage.Bounds().Dx() - invaderImage.Bounds().Dx())
+			invader.position.y = float64(whiteYMid + i*invaderImage.Bounds().Dy() + invaderImage.Bounds().Dy())
+			invaderMatrix = append(invaderMatrix, invader)
+		}
+		if i == columns-1-2 {
+			invader2 := NewInvader("red")
+			invader2.position.x = float64(whiteXMid - (i-1)*invaderImage.Bounds().Dx() - invaderImage.Bounds().Dx() - redInvaderImage.Bounds().Dx())
+			invader2.position.y = float64(whiteYMid + (i-1)*invaderImage.Bounds().Dy() + redInvaderImage.Bounds().Dy())
+			invaderMatrix = append(invaderMatrix, invader2)
+		}
+	}
+
+	// 4th side of cross
+
+	for i := 0; i < columns-2; i++ {
+		if i < columns-1-2 {
+			invader := NewInvader("white")
+			invader.position.x = float64(whiteXMid + i*invaderImage.Bounds().Dx() + invaderImage.Bounds().Dx())
+			invader.position.y = float64(whiteYMid + i*invaderImage.Bounds().Dy() + invaderImage.Bounds().Dy())
+			invaderMatrix = append(invaderMatrix, invader)
+		}
+		if i == columns-1-2 {
+			invader2 := NewInvader("red")
+			invader2.position.x = float64(whiteXMid + (i-1)*invaderImage.Bounds().Dx() + invaderImage.Bounds().Dx() + redInvaderImage.Bounds().Dx())
+			invader2.position.y = float64(whiteYMid + (i-1)*invaderImage.Bounds().Dy() + redInvaderImage.Bounds().Dy())
+			invaderMatrix = append(invaderMatrix, invader2)
+		}
+	}
+
 	return invaderMatrix
 }
 
