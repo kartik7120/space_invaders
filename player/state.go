@@ -21,6 +21,9 @@ type GameState struct {
 	Score              int
 	Audioplayer        *audio.Player
 	StateInstanceCount int
+	Invaders3          []*Invader
+	InvaderTimer       *utils.Timer
+	InvaderBullets     []*Lazer
 }
 
 func NewGameState() *GameState {
@@ -34,6 +37,7 @@ func NewGameState() *GameState {
 		LazerTimer:         utils.NewTimer(2 * time.Second),
 		Score:              0,
 		StateInstanceCount: 0,
+		InvaderTimer:       utils.NewTimer(2 * time.Second),
 	}
 }
 
