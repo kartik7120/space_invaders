@@ -7,7 +7,8 @@ import (
 )
 
 const (
-	lazerSpeed = 350
+	lazerSpeed   = 370
+	invaderLazer = 400
 )
 
 var lazerImage *ebiten.Image = utils.MustLoadImage("lazer.png")
@@ -36,6 +37,13 @@ func (l *Lazer) Update(player *Player) {
 	speed := lazerSpeed / ebiten.TPS()
 
 	l.Y -= float64(speed)
+}
+
+func (l *Lazer) InvaderUpdate() {
+
+	speed := invaderLazer / ebiten.TPS()
+
+	l.Y += float64(speed)
 }
 
 func (l *Lazer) Draw(screen *ebiten.Image) {
