@@ -69,3 +69,9 @@ func (p *Player) Draw(screen *ebiten.Image) {
 	op.GeoM.Translate(p.position.x, p.position.y)
 	screen.DrawImage(p.player, op)
 }
+
+func (p *Player) Collider() utils.Rect {
+	bounds := spaceShip.Bounds()
+
+	return utils.NewRect(p.position.x, p.position.y, float64(bounds.Dx()), float64(bounds.Dy()))
+}
