@@ -101,7 +101,7 @@ var Lvl3Screen *manager.Scene = &manager.Scene{
 		state.Player.Update()
 
 		if len(state.Invaders3) == 0 {
-			Context.Manager.SwitchTo("lvl4")
+			Context.Manager.SwitchTo("endScreen")
 		}
 
 		return nil
