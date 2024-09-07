@@ -7,7 +7,7 @@ import (
 )
 
 const (
-	lazerSpeed   = 370
+	lazerSpeed   = 320
 	invaderLazer = 400
 )
 
