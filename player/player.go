@@ -21,6 +21,7 @@ type Player struct {
 }
 
 var spaceShip *ebiten.Image = utils.MustLoadImage("space_invader_ship4.png")
+var audioPlayer = utils.PlayLazerSound()
 
 func NewPlayer() *Player {
 
@@ -52,16 +53,21 @@ func (p *Player) Update() {
 			p.position.x += 2
 		}
 	} else if state.LazerTimer.IsReady() && ebiten.IsKeyPressed(ebiten.KeyControl) {
+		audioPlayer.Rewind()
+		audioPlayer.Play()
 		bounds := spaceShip.Bounds()
 		halfWidth := float64(bounds.Dx()) / 2
 		halfHeight := float64(bounds.Dy()) / 2
 		lazerXPos := p.position.x + halfWidth
 		lazerYPos := p.position.y + halfHeight
-
+		t := audioPlayer.Position()
+		if t.Seconds() > 1 {
+			audioPlayer.Pause()
+		}
 		state.Bullets = append(state.Bullets, NewLazer(lazerXPos, lazerYPos))
 		state.LazerTimer.Reset()
 	}
-
+	// audioPlayer.Close()
 }
 
 func (p *Player) Draw(screen *ebiten.Image) {
