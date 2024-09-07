@@ -57,9 +57,6 @@ var Lvl1Screen *manager.Scene = &manager.Scene{
 						if state.Invaders[i][j].InvaderType == "white" {
 							state.Score += 10
 						}
-						if state.Invaders[i][j].InvaderType == "red" {
-							state.Score += 20
-						}
 						state.Invaders[i] = append(state.Invaders[i][:j], state.Invaders[i][(j+1):]...)
 						state.Bullets = append(state.Bullets[:k], state.Bullets[k+1:]...)
 					}
