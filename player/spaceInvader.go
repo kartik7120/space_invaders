@@ -13,8 +13,8 @@ type Invader struct {
 	InvaderType string
 }
 
-var invaderImage *ebiten.Image = utils.MustLoadImage("space_invader6.png")
-var redInvaderImage *ebiten.Image = utils.MustLoadImage("red_invader7.png")
+var invaderImage *ebiten.Image = utils.MustLoadImage("space_invader.png")
+var redInvaderImage *ebiten.Image = utils.MustLoadImage("red_invader.png")
 var InvaderTextSource = utils.MustLoadInvaderFont()
 
 func NewInvader(invaderType string) *Invader {
