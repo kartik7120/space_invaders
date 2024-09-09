@@ -2,7 +2,7 @@
 
 ## Description
 
-A space invaders game made with Ebiten, a simple 2D game library in Go.
+A space invaders game made with [Ebiten](https://ebitengine.org/), a simple 2D game library in Go.
 
 ## How to run the game
 
