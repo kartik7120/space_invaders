@@ -20,7 +20,7 @@ type Player struct {
 	player   *ebiten.Image
 }
 
-var spaceShip *ebiten.Image = utils.MustLoadImage("space_invader_ship4.png")
+var spaceShip *ebiten.Image = utils.MustLoadImage("space_invader_ship.png")
 var audioPlayer = utils.PlayLazerSound()
 
 func NewPlayer() *Player {
